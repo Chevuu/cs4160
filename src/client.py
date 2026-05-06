@@ -1,34 +1,20 @@
-"""CLI orchestration for mining and IPv8 submission."""
+"""Orchestration for mining and IPv8 submission."""
 
 from __future__ import annotations
 
-import argparse
 import asyncio
 from pathlib import Path
-from typing import Sequence
 
 from ipv8.configuration import ConfigBuilder, Strategy, WalkerDefinition, default_bootstrap_defs
 from ipv8_service import IPv8
 
-from .constants import DEFAULT_KEY_FILE, DEFAULT_PROGRESS_FILE
+from .constants import DEFAULT_KEY_FILE, DEFAULT_PROGRESS_FILE, GITHUB_URL, PRECOMPUTED_NONCE, STUDENT_EMAIL
 from .pow import WorkUnit, digest_for, leading_zero_bits, read_checkpoint, satisfies_target, solve_pow
 from .protocol import LabRegistrationOverlay, ServerReply
 
 
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="Register a Lab 1 Proof of Work over IPv8.")
-    parser.add_argument("--email", required=True, help="TU Delft email address used for the PoW input")
-    parser.add_argument("--github-url", required=True, help="Public repository URL used for the PoW input")
-    parser.add_argument("--nonce", type=int, help="Already-mined nonce to submit")
-    parser.add_argument("--key-file", default=DEFAULT_KEY_FILE, help="IPv8 private key path to load or create")
-    parser.add_argument("--port", type=int, default=0, help="UDP port for IPv8; 0 lets the OS choose")
-    parser.add_argument(
-        "--progress-file",
-        default=DEFAULT_PROGRESS_FILE,
-        help="JSON file used to resume mining progress for the exact same email and URL",
-    )
-    parser.add_argument("--timeout", type=float, default=180.0, help="Seconds to wait for the server response")
-    return parser
+IPV8_PORT = 0
+RESPONSE_TIMEOUT_SECONDS = 180.0
 
 
 def obtain_nonce(work: WorkUnit, supplied_nonce: int | None, progress_file: Path) -> int:
@@ -93,23 +79,21 @@ async def submit_over_ipv8(
         await ipv8.stop()
 
 
-async def run_async(argv: Sequence[str] | None = None) -> int:
-    args = build_parser().parse_args(argv)
-    work = WorkUnit(args.email.strip(), args.github_url.strip())
-    progress_file = Path(args.progress_file)
-    nonce = obtain_nonce(work, args.nonce, progress_file)
+async def run_async() -> int:
+    work = WorkUnit(STUDENT_EMAIL, GITHUB_URL)
+    nonce = obtain_nonce(work, PRECOMPUTED_NONCE, Path(DEFAULT_PROGRESS_FILE))
 
     reply = await submit_over_ipv8(
         work.email,
         work.github_url,
         nonce,
-        key_path=Path(args.key_file),
-        port=args.port,
-        timeout=args.timeout,
+        key_path=Path(DEFAULT_KEY_FILE),
+        port=IPV8_PORT,
+        timeout=RESPONSE_TIMEOUT_SECONDS,
     )
     print(f"Server replied: success={reply.success}, message={reply.message}")
     return 0 if reply.success else 1
 
 
-def main(argv: Sequence[str] | None = None) -> int:
-    return asyncio.run(run_async(argv))
+def main() -> int:
+    return asyncio.run(run_async())

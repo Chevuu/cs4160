@@ -10,3 +10,9 @@ DIFFICULTY_BITS = 28
 MAX_WIRE_NONCE = (1 << 63) - 1
 DEFAULT_KEY_FILE = "lab1_identity.pem"
 DEFAULT_PROGRESS_FILE = "pow-progress.json"
+
+STUDENT_EMAIL = "v.jurisic@student.tudelft.nl"
+GITHUB_URL = "https://github.com/Chevuu/cs4160"
+
+# Set this to an integer if you want to submit a known-good nonce without mining again.
+PRECOMPUTED_NONCE = None

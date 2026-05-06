@@ -14,32 +14,22 @@ python -m pip install -e .
 
 ## Run
 
-Pick the exact GitHub repository URL before mining. Changing the URL changes the
-Proof of Work input and requires a new nonce.
+The email and GitHub URL are hardcoded in `src/constants.py`:
 
 ```bash
-python -m cs4160_lab1 \
-  --email "your-netid@student.tudelft.nl" \
-  --github-url "https://github.com/Chevuu/cs4160"
+v.jurisic@student.tudelft.nl
+https://github.com/Chevuu/cs4160
+```
+
+Run the client with:
+
+```bash
+python -m src
 ```
 
 The client writes mining progress to `pow-progress.json` and creates
 `lab1_identity.pem` if the key does not exist yet. Keep that `.pem` file private
 and back it up after a successful registration.
 
-If you already have a nonce, skip mining:
-
-```bash
-python -m cs4160_lab1 \
-  --email "your-netid@student.tudelft.nl" \
-  --github-url "https://github.com/Chevuu/cs4160" \
-  --nonce 123456789
-```
-
-## Tests
-
-The local tests cover deterministic PoW behavior and do not require IPv8:
-
-```bash
-python -m unittest discover -s tests
-```
+If you already have a nonce, set `PRECOMPUTED_NONCE` in `src/constants.py` to
+that integer and run the same command again.

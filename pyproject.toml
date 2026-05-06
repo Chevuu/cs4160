@@ -13,7 +13,10 @@ dependencies = [
 ]
 
 [project.scripts]
-cs4160-lab1 = "cs4160_lab1.__main__:main"
+cs4160-lab1 = "src.__main__:main"
 
-[tool.setuptools.packages.find]
-where = ["src"]
+[tool.setuptools]
+packages = ["src"]
+
+[tool.setuptools.package-dir]
+src = "src"
