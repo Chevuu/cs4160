@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cs4160-lab1-client"
+version = "0.1.0"
+description = "IPv8 Proof of Work client for CS4160 Lab 1"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "ipv8>=3.2,<4",
+]
+
+[project.scripts]
+cs4160-lab1 = "cs4160_lab1.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

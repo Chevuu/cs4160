@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.egg-info/
+
+# Keep the generated IPv8 identity private.
+*.pem
+
+# Local mining progress.
+pow-progress.json
