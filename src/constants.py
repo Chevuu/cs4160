@@ -8,7 +8,7 @@ SERVER_PUBLIC_KEY_HEX = (
 
 DIFFICULTY_BITS = 28
 MAX_WIRE_NONCE = (1 << 63) - 1
-DEFAULT_KEY_FILE = "lab1_identity.pem"
+DEFAULT_KEY_FILE = "vuk.pem"
 DEFAULT_PROGRESS_FILE = "pow-progress.json"
 
 STUDENT_EMAIL = "v.jurisic@student.tudelft.nl"
